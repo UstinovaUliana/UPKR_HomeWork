@@ -1,16 +1,16 @@
 #include "Kunitsyna.h"
+using namespace std;
 
 BBS::BBS() {
-	p = 11;
-	q = 19;
-	x0 = 6;
-	m = p * q;
+	p = 0;
+	q = 0;
+	x0 = 0;
 }
 
 void BBS::setParametrs(int p, int q, int x0) {
-	this->p = p;
-	this->q = q;
-	this->x0 = x0;
+	this->p;
+	this->q;
+	this->x0;
 	this->m = p * q;
 }
 

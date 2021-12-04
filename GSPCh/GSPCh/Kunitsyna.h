@@ -3,10 +3,8 @@
 
 class BBS {
 
-private:
-	int p, q, m, x0;
-
 public:
+	int p, q, m, x0;
 	BBS();
 	~BBS();
 	BBS(int p, int q, int x0);
