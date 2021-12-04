@@ -5,6 +5,7 @@ BBS::BBS() {
 	p = 0;
 	q = 0;
 	x0 = 0;
+	m = p * q;
 }
 
 void BBS::setParametrs(int p, int q, int x0) {

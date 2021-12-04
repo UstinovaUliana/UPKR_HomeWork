@@ -55,8 +55,11 @@ int main()
 {
     setlocale(LC_ALL, "Russian");
     int kolvo;
+    /*
     int ngd;
     int vgd;
+    */
+    int range;
     int p;
     int q;
     int x0;
@@ -64,13 +67,16 @@ int main()
     cout << "Введите количество случайных чисел: ";
     kolvo = getInt();
     cout << endl << "Введите диапазон: ";
+    range = getInt();
+    /*
     cout << endl << "От: ";
     ngd = getInt();
     cout << endl << "До: ";
     vgd = getInt();
     int dano[3] = { kolvo,ngd,vgd };
+    */
 
-    cout << "Алгоритм Блюм-Блюма-Шуба: \n";
+    cout << "Алгоритм Блюм-Блюма-Шуба\n";
     cout << "Введите p: ";
     p = getInt();
     cout << "Введите q: ";
@@ -86,7 +92,7 @@ int main()
     cout << " случайных чисел: ";
 
     for (int i = 0; i < kolvo; i++) {
-        cout << NumberGenerate.RandNum() << " ";
+        cout << NumberGenerate.RandNum() % range << " ";
     }
 
     cout << endl;
