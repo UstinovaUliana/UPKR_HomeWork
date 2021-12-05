@@ -6,6 +6,7 @@ vector <float> Psevdo(const int& arr_size)
 {
     //y=5^x
     vector<float> P_arr = {};
+    float Y_rand, digit;
     float lyambda = (float)1 / arr_size;
     for (int a = 0; a < arr_size; a++)
     {
