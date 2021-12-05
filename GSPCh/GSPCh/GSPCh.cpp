@@ -19,30 +19,52 @@ int getInt()
         cout << "Ошибка, повторите ввод" << endl;
     }
 }
+float getFloat()
+{
+    float input;
+    while (1) {
+        cin >> input;
+        if (!cin.fail())
+            return input;
+        cin.clear();
+        cin.ignore(2000, '\n');
+        cout << "Ошибка, повторите ввод" << endl;
+    }
+}
 
-using alg = vector<float>(*)()/*(int dano)*/;
+
+using alg = vector<float>(*)(int kolvo, float ngd, float vgd, float scale)/*(int dano)*/;
 //vector <int> Kunitsyna(int dano);
 //vector <int> Kunitsyna(int dano);
-vector <float> Maklaren();
-void checkAlg(/*string name, */alg algoritm/*, int dano[3]*/) {
+vector<float> Maklaren(int kolvo, float ngd, float vgd, float scale);
+bool compLess(int a, int b)
+{
+    return (a < b);
+}
+void checkAlg(/*string name, */alg algoritm, int kolvo, float ngd, float vgd, float scale) {
     auto start = chrono::system_clock::now();
-    vector<float> result = algoritm()/*(dano[3])*/;
+    vector<float> result = algoritm(kolvo,ngd,vgd,scale)/*(dano[3])*/;
     auto stop = chrono::system_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start).count();
     for (auto i : result) {
         cout << i << endl;
     }
-    int period;
-    for (int i =0; i < result.size()-1; i++) {
+
+    vector <int> period;
+    for (int i = 0; i < result.size()-1; i++) {
         for (int j = i+1; j < result.size(); j++) {
             if (result[j]==result[i]) {
-                period = j - i;
-                break;
+                period.push_back(j - i);
             }
-            else  period = result.size();
         }
     }
-    cout << period << endl << duration << endl;
+    int minPer=result.size(); 
+    for (int i = 0; i < period.size(); i++) {
+        if (period[i] < minPer) {
+            minPer = period[i];
+        }
+    }
+    cout << "Period: " << minPer << endl <<"Duration (mks): " << duration << endl;
     //равномерное распределение
     //float raspr = 1./dano[3]-dano[2];
     //float srper; //средний период
@@ -66,30 +88,31 @@ void checkAlg(/*string name, */alg algoritm/*, int dano[3]*/) {
 
 int main()
 {
-    setlocale(LC_ALL, "Russian");
-
-   int kolvo;
-    int ngd;
-    int vgd;
+    int kolvo;
+    float ngd;
+    float vgd;
+    float scale;
    /*
     int range;
     int p;
     int q;
     int x0;
     int m; */
-    cout << "Введите количество случайных чисел: ";
+    cout << "Enter quantity: ";
     kolvo = getInt();
-    cout << endl << "Введите диапазон: ";
-    cout << endl << "От: ";
-    ngd = getInt();
-    cout << endl << "До: ";
-    vgd = getInt();
-    int dano[3] = { kolvo,ngd,vgd };
+    cout << endl << "Enter limit: ";
+    cout << endl << "From: ";
+    ngd = getFloat();
+    cout << endl << "To: ";
+    vgd = getFloat();
+    cout << endl << "Enter nubers after point: ";
+    scale = getFloat();
     /*vector<double> outputSequence = Maklaren();
     for (auto i : outputSequence) {
         cout << i << endl;
     }*/
-   checkAlg(Maklaren);
+    cout << "Maklaren" << endl;
+   checkAlg(Maklaren,kolvo,ngd,vgd,scale);
     /*checkAlg(Kunitsyna);
     checkAlg(Peklova);
     checkAlg(Rakov);*/
