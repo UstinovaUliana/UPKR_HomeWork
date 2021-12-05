@@ -1,32 +1,34 @@
-#include "Kunitsyna.h"
+#include <iostream>
+#include <fstream>
+#include <random>
+#include <vector>
+#include <math.h>
 using namespace std;
 
-BBS::BBS() {
-	p = 0;
-	q = 0;
-	x0 = 0;
-	m = p * q;
-}
+int p = 111;
+int q = 77;
+int x0 = 13;
+int m = p * q;
+int kolvo, i, random, ngd, vgd;
 
-void BBS::setParametrs(int p, int q, int x0) {
-	this->p;
-	this->q;
-	this->x0;
-	this->m = p * q;
-}
-
-BBS::BBS(int p, int q, int x0) {
-	setParametrs(p, q, x0);
-}
-
-int BBS::RandNum() {
+int RandNum(int& x0, int m) {
 	int nextRandNum = (x0 * x0) % m;
 	x0 = nextRandNum;
 	return nextRandNum;
 }
 
-int BBS::RandBit() {
-	return RandNum() % 2;
-}
+vector <int> algorithm() {
+	vector <int> BBS = {};
+	cout << "Blum-Blum-Shub algorithm\n";
+	cout << "Generate ";
+	cout << kolvo;
+	cout << " random numbers: ";
 
-BBS::~BBS() {}
+	for (int i = 0; i < kolvo; i++) {
+		random = ngd + RandNum(x0, m) % vgd;
+		cout << random << " ";
+		BBS.push_back((float)random);
+	}
+	cout << endl;
+	return BBS;
+}
