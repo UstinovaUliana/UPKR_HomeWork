@@ -27,7 +27,6 @@ vector <float> BBS_algorithm(int kolvo, float ngd, float vgd, float scale) {
 		random = ngd + RandNum(x0, m) % vgd;
 		BBS.push_back((float)random);
 	}
-	cout << endl;
 
 	for (auto& i : BBS) {
 		i = floor(i * scale) / scale;
