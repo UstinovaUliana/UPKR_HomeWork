@@ -1,9 +1,8 @@
-#include "Kunitsyna.h"
 #include <chrono>
 #include <iostream>
 #include <fstream>
-#include <iostream>
 #include <string>
+#include <random>
 #include <vector>
 using namespace std;
 
@@ -20,91 +19,104 @@ int getInt()
         cout << "Ошибка, повторите ввод" << endl;
     }
 }
-using alg = vector<int>(*)(int dano);
+float getFloat()
+{
+    float input;
+    while (1) {
+        cin >> input;
+        if (!cin.fail())
+            return input;
+        cin.clear();
+        cin.ignore(2000, '\n');
+        cout << "Ошибка, повторите ввод" << endl;
+    }
+}
 
-void checkAlg(string name, alg algoritm, int dano[3]) {
+
+using alg = vector<float>(*)(int kolvo, float ngd, float vgd, float scale)/*(int dano)*/;
+//vector <int> Kunitsyna(int dano);
+//vector <int> Kunitsyna(int dano);
+vector<float> Maklaren(int kolvo, float ngd, float vgd, float scale);
+bool compLess(int a, int b)
+{
+    return (a < b);
+}
+void checkAlg(/*string name, */alg algoritm, int kolvo, float ngd, float vgd, float scale) {
     auto start = chrono::system_clock::now();
-    vector<int> result = algoritm(dano[3]);
+    vector<float> result = algoritm(kolvo,ngd,vgd,scale)/*(dano[3])*/;
     auto stop = chrono::system_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start).count();
-    int sumres = 0;
     for (auto i : result) {
-        cout << i << " ";
-        sumres += i;
+        cout << i << endl;
     }
-    //равномерное распределение
-    float raspr = 1./dano[3]-dano[2];
-    float srper; //средний период
-    float srznach=sumres/ result.size(); //среднее значение
-    int s=result.size()-1;
-    vector <int> di;
-    for (int i = 1; i < result.size(); i++) {
-        // map <i, appearence count> ;
-        //
 
-        di.push_back(result[i + 1] - result[i]);
-        int sumdi=0;
-        for (auto j : di) {
-            sumdi += j;
+    vector <int> period;
+    for (int i = 0; i < result.size()-1; i++) {
+        for (int j = i+1; j < result.size(); j++) {
+            if (result[j]==result[i]) {
+                period.push_back(j - i);
+            }
         }
-        srper = sumdi / s;
     }
+    int minPer=result.size(); 
+    for (int i = 0; i < period.size(); i++) {
+        if (period[i] < minPer) {
+            minPer = period[i];
+        }
+    }
+    cout << "Period: " << minPer << endl <<"Duration (mks): " << duration << endl;
+    //равномерное распределение
+    //float raspr = 1./dano[3]-dano[2];
+    //float srper; //средний период
+    //float srznach=sumres/ result.size(); //среднее значение
+    //int s=result.size()-1;
+    //vector <int> di;
+    //for (int i = 1; i < result.size(); i++) {
+    //    // map <i, appearence count> ;
+    //    //
+
+    //    di.push_back(result[i + 1] - result[i]);
+    //    int sumdi=0;
+    //    for (auto j : di) {
+    //        sumdi += j;
+    //    }
+    //    srper = sumdi / s;
+    //}
+
+
 }
 
 int main()
 {
-    setlocale(LC_ALL, "Russian");
     int kolvo;
-    /*
-    int ngd;
-    int vgd;
-    */
+    float ngd;
+    float vgd;
+    float scale;
+   /*
     int range;
     int p;
     int q;
     int x0;
-    int m;
-    cout << "Введите количество случайных чисел: ";
+    int m; */
+    cout << "Enter quantity: ";
     kolvo = getInt();
-    cout << endl << "Введите диапазон: ";
-    range = getInt();
-    /*
-    cout << endl << "От: ";
-    ngd = getInt();
-    cout << endl << "До: ";
-    vgd = getInt();
-    int dano[3] = { kolvo,ngd,vgd };
-    */
-
-    cout << "Алгоритм Блюм-Блюма-Шуба\n";
-    cout << "Введите p: ";
-    p = getInt();
-    cout << "Введите q: ";
-    q = getInt();
-    cout << "Введите x0: ";
-    x0 = getInt();
-    m = p * q;
-
-    BBS NumberGenerate(p, q, x0);
-
-    cout << "Генерация ";
-    cout << kolvo;
-    cout << " случайных чисел: ";
-
-    for (int i = 0; i < kolvo; i++) {
-        cout << NumberGenerate.RandNum() % range << " ";
-    }
-
-    cout << endl;
-
-    cout << "Генерация ";
-    cout << kolvo;
-    cout << " случайных битов: ";
-
-    for (int i = 0; i < kolvo; i++) {
-        cout << NumberGenerate.RandBit() << " ";
-    }
-    return 0;
+    cout << endl << "Enter limit: ";
+    cout << endl << "From: ";
+    ngd = getFloat();
+    cout << endl << "To: ";
+    vgd = getFloat();
+    cout << endl << "Enter nubers after point: ";
+    scale = getFloat();
+    /*vector<double> outputSequence = Maklaren();
+    for (auto i : outputSequence) {
+        cout << i << endl;
+    }*/
+    cout << "Maklaren" << endl;
+   checkAlg(Maklaren,kolvo,ngd,vgd,scale);
+    /*checkAlg(Kunitsyna);
+    checkAlg(Peklova);
+    checkAlg(Rakov);*/
 }
-
-
+//Период - это когда числа начинают повторяться
+//Быстрота получения Xn+1 элемента последовательности чисел при задании Xn элемента для I любой величины; 
+//Функции запуска алгоритмов доделать
