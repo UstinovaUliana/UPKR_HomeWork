@@ -1,38 +1,21 @@
 #include <iostream>
-#include<chrono>
 #include<math.h>
-#include <cmath>
-#include<algorithm>
+#include<vector>
 using namespace std;
-void Psevdo();
-int main()
+vector <float> Psevdo()
 {
-    Psevdo();
-}
-
-void Psevdo()
-{
-    //e^x;
-    float P_arr[1000] = {};
-    float size = sizeof(P_arr) / sizeof(P_arr[0]);;
-    float Y_rand;
-    float lyambda = 1 / size;
-    float* first(&P_arr[0]);
-    float* last(&P_arr[1000]);
-    auto t1 = std::chrono::high_resolution_clock::now();
-    for (int a = 0; a < size; a++)
+    cout << "amount of numbers";
+    int arr_size;
+    cin >> arr_size;
+    //y=2^x
+    vector<float> P_arr = {};
+    float Y_rand, digit;
+    float lyambda = (float)1 / arr_size;
+    for (int a = 0; a < arr_size; a++)
     {
         Y_rand = (float)rand() / (float)RAND_MAX;
-        P_arr[a] = ((-1) * log(Y_rand)) / lyambda;//X
+        digit = -1 * ((float)log(Y_rand) / (float)log(5)) / lyambda;//X=logY/log5
+        P_arr.push_back(digit);
     }
-    auto t2 = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();;
-    //sort(first, last, [](float a, float b){
-    //       return a < b;});
-    for (int a = 0; a < size; a++)
-    {
-        cout << P_arr[a] << endl;
-    }
-    cout << "insert(mks): " << duration << endl;
+    return P_arr;
 }
-
