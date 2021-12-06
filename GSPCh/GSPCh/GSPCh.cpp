@@ -4,6 +4,7 @@
 #include <string>
 #include <random>
 #include <vector>
+#include <fstream>
 using namespace std;
 
 
@@ -32,18 +33,52 @@ float getFloat()
     }
 }
 
-
-using alg = vector<float>(*)(int kolvo, float ngd, float vgd, float scale)/*(int dano)*/;
-//vector <int> Kunitsyna(int dano);
-//vector <int> Kunitsyna(int dano);
-vector<float> Maklaren(int kolvo, float ngd, float vgd, float scale);
-bool compLess(int a, int b)
+void saveResult(string ofileName,vector <float> result, int minPer, int duration)
 {
-    return (a < b);
+    ofstream fout;
+    fout.open(ofileName + ".txt", ios::out);
+
+    if (fout.is_open()) {
+        fout << "Numbers: "<<endl;
+        for (auto& i : result) {
+            fout << i << endl;
+        }
+        fout << "Period: " << minPer <<"." << endl;
+        fout << "Duration: " << duration<<" mks." << endl;
+        fout.close();
+    }
 }
-void checkAlg(/*string name, */alg algoritm, int kolvo, float ngd, float vgd, float scale) {
+
+vector <float> loadDano()
+{
+    vector <float> dannie;
+    ifstream fin;
+    cout << "Enter file name: ";
+    string ifileName;
+    cin >> ws;
+    getline(cin, ifileName);
+    fin.open(ifileName + ".txt", ios::in);
+    if (fin.is_open())
+    {
+        float dano;
+        while (!fin.eof()) {
+            fin >> dano;
+            dannie.push_back(dano);
+        }
+        fin.close();
+    }
+    else cout << "Can't open the file." << endl;
+    return dannie;
+}
+
+using alg = vector<float>(*)(int kolvo, float ngd, float vgd, float scale);
+vector<float> Maklaren(int kolvo, float ngd, float vgd, float scale);
+vector <float> Psevdo(int kolvo, float ngd, float vgd, float scale);
+vector <float> BBS_algorithm(int kolvo, float ngd, float vgd, float scale);
+
+void checkAlg(string name, alg algoritm, int kolvo, float ngd, float vgd, float scale) {
     auto start = chrono::system_clock::now();
-    vector<float> result = algoritm(kolvo,ngd,vgd,scale)/*(dano[3])*/;
+    vector<float> result = algoritm(kolvo,ngd,vgd,scale);
     auto stop = chrono::system_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start).count();
     for (auto i : result) {
@@ -65,58 +100,26 @@ void checkAlg(/*string name, */alg algoritm, int kolvo, float ngd, float vgd, fl
         }
     }
     cout << "Period: " << minPer << endl <<"Duration (mks): " << duration << endl;
-    //равномерное распределение
-    //float raspr = 1./dano[3]-dano[2];
-    //float srper; //средний период
-    //float srznach=sumres/ result.size(); //среднее значение
-    //int s=result.size()-1;
-    //vector <int> di;
-    //for (int i = 1; i < result.size(); i++) {
-    //    // map <i, appearence count> ;
-    //    //
-
-    //    di.push_back(result[i + 1] - result[i]);
-    //    int sumdi=0;
-    //    for (auto j : di) {
-    //        sumdi += j;
-    //    }
-    //    srper = sumdi / s;
-    //}
-
-
+    saveResult(name, result, minPer, (int)duration);
 }
 
 int main()
 {
-    int kolvo;
-    float ngd;
-    float vgd;
-    float scale;
-   /*
-    int range;
-    int p;
-    int q;
-    int x0;
-    int m; */
-    cout << "Enter quantity: ";
-    kolvo = getInt();
-    cout << endl << "Enter limit: ";
-    cout << endl << "From: ";
-    ngd = getFloat();
-    cout << endl << "To: ";
-    vgd = getFloat();
-    cout << endl << "Enter nubers after point: ";
-    scale = getFloat();
-    /*vector<double> outputSequence = Maklaren();
-    for (auto i : outputSequence) {
-        cout << i << endl;
-    }*/
-    cout << "Maklaren" << endl;
-   checkAlg(Maklaren,kolvo,ngd,vgd,scale);
-    /*checkAlg(Kunitsyna);
-    checkAlg(Peklova);
-    checkAlg(Rakov);*/
+        int kolvo;
+        float ngd;
+        float vgd;
+        float scale;
+        vector <float> dannie = loadDano();
+        int iters = dannie.size() / 4;
+        for (int i = 0; i < iters; i++) {
+            kolvo = dannie[4 * i]; //0 4 8 12 16
+            ngd = dannie[4 * i + 1];// 1 5 9 13 17
+            vgd = dannie[4 * i + 2];//2 6 10 14 18
+            scale = dannie[4 * i + 3];//3 7 11 15 19
+            cout << "McLaren-Marsaglia generator" << endl;
+            checkAlg("McLaren-Marsaglia generator_" + to_string(i+1), Maklaren, kolvo, ngd, vgd, scale);
+            cout << "Inverse transform method" << endl;
+            checkAlg("Inverse transform method_" + to_string(i+1), Psevdo, kolvo, ngd, vgd, scale);
+            checkAlg("Blum-Blum-Shub algorithm_" + to_string(i+1), BBS_algorithm, kolvo, ngd, vgd, scale);
+        }
 }
-//Период - это когда числа начинают повторяться
-//Быстрота получения Xn+1 элемента последовательности чисел при задании Xn элемента для I любой величины; 
-//Функции запуска алгоритмов доделать
