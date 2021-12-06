@@ -7,44 +7,19 @@
 #include <fstream>
 using namespace std;
 
-
-int getInt()
-{
-    int input;
-    while (1) {
-        cin >> input;
-        if (!cin.fail())
-            return input;
-        cin.clear();
-        cin.ignore(2000, '\n');
-        cout << "Ошибка, повторите ввод" << endl;
-    }
-}
-float getFloat()
-{
-    float input;
-    while (1) {
-        cin >> input;
-        if (!cin.fail())
-            return input;
-        cin.clear();
-        cin.ignore(2000, '\n');
-        cout << "Ошибка, повторите ввод" << endl;
-    }
-}
-
-void saveResult(string ofileName,vector <float> result, int minPer, int duration)
+void saveResult(string ofileName,vector <float> result, int minPer, int duration, int kolvo, float ngd, float vgd, float scale)
 {
     ofstream fout;
     fout.open(ofileName + ".txt", ios::out);
 
     if (fout.is_open()) {
-        fout << "Numbers: "<<endl;
+        fout << "Generated "<<kolvo << " numbers from " << ngd << " to " << vgd << " with accuracy " << scale << "." << endl;
         for (auto& i : result) {
             fout << i << endl;
         }
-        fout << "Period: " << minPer <<"." << endl;
-        fout << "Duration: " << duration<<" mks." << endl;
+        if (minPer == result.size()) fout << "Period: >=";
+        else fout << "Period: ";
+        fout << minPer << "." << endl << "Duration: " << duration<<" mks." << endl;
         fout.close();
     }
 }
@@ -86,9 +61,9 @@ void checkAlg(string name, alg algoritm, int kolvo, float ngd, float vgd, float 
     }
 
     vector <int> period;
-    for (int i = 0; i < result.size()-1; i++) {
-        for (int j = i+1; j < result.size(); j++) {
-            if (result[j]==result[i]) {
+    for (int i = 0; i < result.size()-3; i++) {
+        for (int j = i+1; j < result.size()-2; j++) {
+            if (result[j]==result[i] && result[j+1]==result[i+1] && result[j+2]==result[i+2]) {
                 period.push_back(j - i);
             }
         }
@@ -99,8 +74,10 @@ void checkAlg(string name, alg algoritm, int kolvo, float ngd, float vgd, float 
             minPer = period[i];
         }
     }
-    cout << "Period: " << minPer << endl <<"Duration (mks): " << duration << endl;
-    saveResult(name, result, minPer, (int)duration);
+    if (minPer == result.size()) cout << "Period: >=";
+    else cout << "Period: ";
+    cout << minPer << endl << "Duration (mks): " << duration << endl;
+    saveResult(name, result, minPer, (int)duration, kolvo, ngd, vgd, scale);
 }
 
 int main()
