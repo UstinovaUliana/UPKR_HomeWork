@@ -14,9 +14,9 @@ int RandNum(int& x0, int m) {
 vector <float> BBS_algorithm(int kolvo, float ngd, float vgd, float scale) {
 	vector <float> BBS;
 	int random;
-	int p = 111;
-	int q = 77;
-	int x0 = 13;
+	int p = 79;
+	int q = 67;
+	int x0 = 3;
 	int m = p * q;
 	cout << "Blum-Blum-Shub algorithm\n";
 	cout << "Generate ";
@@ -24,7 +24,7 @@ vector <float> BBS_algorithm(int kolvo, float ngd, float vgd, float scale) {
 	cout << " random numbers: ";
 
 	for (int i = 0; i < kolvo; i++) {
-		random = ngd + RandNum(x0, m) % vgd;
+		random = ngd + RandNum(x0, m) % (int)vgd;
 		BBS.push_back((float)random);
 	}
 
